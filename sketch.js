@@ -5,11 +5,13 @@ const Bodies = Matter.Bodies;
 var engine, world;
 var box1, pig1;
 var backgroundImg,platform;
+var bg = "sprites/bg.png"
 
 var gameState = "onSling"
 
 function preload() {
-    backgroundImg = loadImage("sprites/bg.png");
+   
+    getTime ();
 }
 
 function setup(){
@@ -38,16 +40,20 @@ function setup(){
     log= new Log(200,200,50, PI/2);
 
     bird = new Bird(200,50);
+
     slingshot = new SlingShot(bird.body,{x:200,y:50});
 
 }
 
 function draw(){
+    if (backgroundImg)
     background(backgroundImg);
+    else
+    background(255);
     Engine.update(engine);
-    console.log(box2.body.position.x);
-    console.log(box2.body.position.y);
-    console.log(box2.body.angle);
+    //console.log(box2.body.position.x);
+    //console.log(box2.body.position.y);
+    //console.log(box2.body.angle);
     box1.display();
     box2.display();
     ground.display();
@@ -88,3 +94,22 @@ function keyPressed(){
         Matter.Body.setPosition(bird.body,{x: 200, y:200});
     }
 }
+  async function getTime (){
+var response = await fetch("https://worldtimeapi.org/api/timezone/Asia/Tokyo");
+var responseJson = await response.json();
+console.log (responseJson)
+
+var datetime = responseJson.datetime;
+console.log (datetime)
+
+var hour = datetime.slice(11,13);
+console.log (hour)
+
+if(hour> 06 && hour<19){
+    bg= "sprites/bg.png"
+}
+ else{
+    bg= "sprites/bg2.jpg"  
+ }
+ backgroundImg = loadImage(bg);
+ }
